@@ -525,6 +525,9 @@ func (s *Scaffold) afterEach() {
 			output = s.GetDeploymentLogs("ingress-apisix-controller-deployment-e2e-test")
 			if output != "" {
 				_, _ = fmt.Fprintln(ginkgo.GinkgoWriter, output)
+				if strings.Contains(strings.ToLower(output), "controller restarted") {
+					_, _ = fmt.Fprintln(ginkgo.GinkgoWriter, "Controller has restarted!")
+				}
 			}
 			if s.opts.EnableWebhooks {
 				output, _ = k8s.RunKubectlAndGetOutputE(ginkgo.GinkgoT(), s.kubectlOptions, "get", "validatingwebhookconfigurations", "-o", "yaml")
